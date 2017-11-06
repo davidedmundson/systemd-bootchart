@@ -29,6 +29,9 @@
 #include <string.h>
 #include <time.h>
 #include <unistd.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <unistd.h>
 
 #include "alloc-util.h"
 #include "bootchart.h"
@@ -139,6 +142,7 @@ int log_sample(DIR *proc,
         int r;
         int c;
         int p;
+        int u;
         int mod;
         static int e_fd = -1;
         ssize_t s;
@@ -252,7 +256,7 @@ schedstat_next:
                                 break;
                 }
 
-                /* end of our LL? then append a new record */
+                 /* end of our LL? then append a new record */
                 if (ps->pid != pid) {
                         _cleanup_fclose_ FILE *st = NULL;
                         char t[32];
@@ -288,7 +292,7 @@ schedstat_next:
 
                         /* get name, start time; requires CONFIG_SCHED_DEBUG in kernel */
                         if (ps->sched < 0) {
-                                sprintf(filename, "%d/sched", pid);
+                                sprintf(filename, "/proc/%d", pid);
                                 ps->sched = openat(procfd, filename, O_RDONLY|O_CLOEXEC);
                                 if (ps->sched < 0)
                                         goto no_sched;
@@ -351,6 +355,13 @@ no_sched:
 
                         ps->ppid = p;
 
+                        sprintf(filename, "/proc/%d/stat", pid);
+                        struct stat file_info;
+                        stat(filename, &file_info);
+                        ps->uid = file_info.st_uid;
+
+                        printf("DAVE %s, %d\n", filename, ps->uid);
+
                         /*
                          * setup child pointers
                          *
@@ -359,6 +370,8 @@ no_sched:
                          */
                         if (pid == 1)
                                 continue; /* nothing to do for init atm */
+
+
 
                         /* kthreadd has ppid=0, which breaks our tree ordering */
                         if (ps->ppid == 0)

@@ -72,6 +72,7 @@ struct ps_struct {
         char name[256];
         int pid;
         int ppid;
+        int uid;
         char *cgroup;
 
         /* cache fd's */

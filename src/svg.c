@@ -900,6 +900,10 @@ static bool ps_filter(struct ps_struct *ps) {
         if (ps->pid == 2)
                 return false;
 
+        if (ps->uid != getuid()) {
+            return true;
+        }
+
         /* drop stuff that doesn't use any real CPU time */
         if (ps->total <= 0.001)
                 return true;
