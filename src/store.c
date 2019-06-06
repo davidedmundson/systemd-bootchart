@@ -360,8 +360,6 @@ no_sched:
                         stat(filename, &file_info);
                         ps->uid = file_info.st_uid;
 
-                        printf("DAVE %s, %d\n", filename, ps->uid);
-
                         /*
                          * setup child pointers
                          *
