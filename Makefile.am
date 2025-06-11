@@ -41,14 +41,14 @@ rootprefix=@rootprefix@
 rootbindir=$(rootprefix)/bin
 rootlibexecdir=$(rootprefix)/lib/systemd
 pkgsysconfdir=$(sysconfdir)/systemd
-systemunitdir=$(rootprefix)/lib/systemd/system
+systemunitdir=$(rootprefix)/lib/systemd/user
 
 AM_CFLAGS = $(OUR_CFLAGS)
 AM_LDFLAGS = $(OUR_LDFLAGS)
 AM_CPPFLAGS = \
 	-include $(top_builddir)/config.h \
 	-DPKGSYSCONFDIR=\"$(pkgsysconfdir)\" \
-	-DSYSTEM_CONFIG_UNIT_PATH=\"$(pkgsysconfdir)/system\" \
+	-DSYSTEM_CONFIG_UNIT_PATH=\"$(pkgsysconfdir)/user\" \
 	-DSYSTEM_DATA_UNIT_PATH=\"$(systemunitdir)\" \
 	-DSYSTEMD_BINARY_PATH=\"$(rootlibexecdir)/systemd\" \
 	-DROOTPREFIX=\"$(rootprefix)\" \
